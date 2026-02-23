@@ -1,3 +1,6 @@
+link=https://prathmeshk007-codealpha-task-credit-card-ml-app-4b0kff.streamlit.app/
+
+
 # Credit Card Score Prediction
 
 This project predicts credit card scores (Good, Average, Poor) using machine learning models trained on customer financial and demographic data. It demonstrates end-to-end ML workflow including data preprocessing, model training, evaluation, and deployme
