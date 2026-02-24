@@ -5,7 +5,6 @@ link=https://prathmeshk007-codealpha-task-credit-card-ml-app-4b0kff.streamlit.ap
 
 This project predicts credit card scores (Good, Average, Poor) using machine learning models trained on customer financial and demographic data. It demonstrates end-to-end ML workflow including data preprocessing, model training, evaluation, and deployme
 ## 📂 Repository Contents
-- **app.py** – Flask app for serving predictions
 - **credit_data.csv** – Dataset used for training/testing
 - **credit_prediction.ipynb** – Jupyter Notebook with data exploration, preprocessing, and model training
 - **model.pkl** – Saved trained model
