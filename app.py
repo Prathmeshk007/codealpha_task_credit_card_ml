@@ -1,27 +1,46 @@
-﻿import streamlit as st, pandas as pd, joblib
+﻿import streamlit as st
+import pandas as pd
+import pickle
 
-st.title("Credit Score Predictor")
-# 1. Load Artifacts
+# --- 1. LOAD MODEL ---
 try:
-    data = joblib.load('model.pkl')
-    model, encoders, cols = data['model'], data['encoders'], data['cols']
-except:
-    st.error("Run 'python train.py' first!"); st.stop()
+    with open('model.pkl', 'rb') as f:
+        saved_data = pickle.load(f)
+    model = saved_data['model']
+    features = saved_data['features']
+except FileNotFoundError:
+    st.error("Model file not found! Please run the notebook first.")
+    st.stop()
 
-# 2. Sidebar Inputs
-st.sidebar.header("User Data")
-inputs = {}
-for c in cols:
-    if c in encoders:
-        inputs[c] = st.sidebar.selectbox(f"Select {c}", encoders[c].classes_)
-    else:
-        inputs[c] = st.sidebar.number_input(f"Enter {c}", value=0.0)
+# --- 2. THE APP INTERFACE ---
+st.set_page_config(page_title="Credit Predictor", page_icon="💳")
+st.title("💳 Simple Credit Score Predictor")
+st.write("Fill in the details below to see your predicted credit score.")
 
-# 3. Predict Result
+left_col, right_col = st.columns(2)
+
+with left_col:
+    income = st.number_input("Annual Income ($)", value=50000)
+    age = st.number_input("Age", value=25)
+    banks = st.number_input("Bank Accounts", value=2)
+
+with right_col:
+    cards = st.number_input("Number of Credit Cards", value=3)
+    rate = st.slider("Interest Rate (%)", 0, 40, 15)
+
+# --- 3. PREDICTION LOGIC ---
 if st.button("Predict Score"):
-    df = pd.DataFrame([inputs])
-    for c, le in encoders.items():
-        if c in df.columns: df[c] = le.transform(df[c].astype(str))
-    res = model.predict(df)[0]
-    if 'Credit_Score' in encoders: res = encoders['Credit_Score'].inverse_transform([res])[0]
-    st.success(f"Result: {res}"); st.balloons()
+    # Create input in the exact same format used during training
+    user_input = pd.DataFrame([[income, age, banks, cards, rate]], columns=features)
+    
+    # Get prediction
+    result = model.predict(user_input)[0]
+    
+    st.divider()
+    if result == 'Good':
+        st.success(f"### Predicted Score: **{result}** 🎉")
+    elif result == 'Standard':
+        st.info(f"### Predicted Score: **{result}** 👍")
+    else:
+        st.error(f"### Predicted Score: **{result}** ⚠️")
+    st.balloons()
