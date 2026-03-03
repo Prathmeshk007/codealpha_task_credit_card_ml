@@ -2,17 +2,14 @@
 import pandas as pd
 import pickle
 
-# --- 1. LOAD MODEL ---
-try:
-    with open('model.pkl', 'rb') as f:
-        saved_data = pickle.load(f)
-    model = saved_data['model']
-    features = saved_data['features']
-except FileNotFoundError:
-    st.error("Model file not found! Please run the notebook first.")
-    st.stop()
 
-# --- 2. THE APP INTERFACE ---
+with open('model.pkl', 'rb') as f:
+    saved_data = pickle.load(f)
+model = saved_data['model']
+features = saved_data['features']
+
+
+
 st.set_page_config(page_title="Credit Predictor", page_icon="💳")
 st.title("💳 Simple Credit Score Predictor")
 st.write("Fill in the details below to see your predicted credit score.")
@@ -28,12 +25,10 @@ with right_col:
     cards = st.number_input("Number of Credit Cards", value=3)
     rate = st.slider("Interest Rate (%)", 0, 40, 15)
 
-# --- 3. PREDICTION LOGIC ---
+
 if st.button("Predict Score"):
-    # Create input in the exact same format used during training
     user_input = pd.DataFrame([[income, age, banks, cards, rate]], columns=features)
     
-    # Get prediction
     result = model.predict(user_input)[0]
     
     st.divider()
