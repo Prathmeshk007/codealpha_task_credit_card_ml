@@ -1,5 +1,4 @@
-link=https://prathmeshk007-codealpha-task-credit-card-ml-app-4b0kff.streamlit.app/
-
+link=https://prathmeshk007-codealpha-task-credit-card-ml-app-3qxc6q.streamlit.app/
 
 # Credit Card Score Prediction
 
